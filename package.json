@@ -1,0 +1,75 @@
+{
+  "name": "quartusextension",
+  "displayName": "QuartusExtension",
+  "description": "No",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [{
+        "id": "quartus-main",
+        "title": "Quartus",
+        "icon": "./resources/main-logo.png"
+      }]
+    },
+    "commands": [
+      {
+        "command": "quartusextension.helloWorld",
+        "title": "Quartus: Hello World"
+      },
+      {
+        "command": "quartusextension.newProject",
+        "title": "Quartus: New Project"
+      }
+    ],
+    "views": {
+      "quartus-main": [
+        {
+          "id": "quartus-main",
+          "name": "Quartus"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view":"quartus-main",
+        "contents": "In order to use quartus features, you can open a folder containing a quartus project, or create a new project with the button bellow.\n[Open Folder](command:vscode.openFolder)\n[Create New Project](command:quartusextension.newProject)\nTo learn more about how to use quartus projects in VS Code [read our docs](https://www.chat.com).",
+        "when": "detectQuartusProject == false"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.97.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "eslint": "^9.19.0",
+    "esbuild": "^0.24.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
