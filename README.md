@@ -3,9 +3,9 @@ An extension for Visual Studio Code that can perform all basic quartus, platform
 
 ## How to run (dev environment):
 1. Clone Repo
-2. run `npm install`
+2. Run `npm install`
 3. Open VSCode in the directory of this repo
-4. press F5 to run the extension, and open the dev environment.
+4. Press F5 to run the extension, and open the dev environment.
 
 
 ## Current Functionality
