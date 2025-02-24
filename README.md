@@ -2,8 +2,10 @@
 An extension for Visual Studio Code that can perform all basic quartus, platform designer, and eclipse functionalities.
 
 ## How to run (dev environment):
-1. Open VSCode in the directory of this repo
-2. press F5 to run the extension, and open the dev environment.
+1. Clone Repo
+2. run `npm install`
+3. Open VSCode in the directory of this repo
+4. press F5 to run the extension, and open the dev environment.
 
 
 ## Current Functionality
