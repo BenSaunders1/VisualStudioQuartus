@@ -21,19 +21,23 @@
     },
     "commands": [
       {
-        "command": "quartusextension.helloWorld",
-        "title": "Quartus: Hello World"
-      },
-      {
         "command": "quartusextension.newProject",
         "title": "Quartus: New Project"
+      },
+      {
+        "command": "quartus-design-files.refresh",
+        "title": "Quartus: Refresh Design Files"
+      },
+      {
+        "command": "quartusextension.getProjectFiles",
+        "title": "Quartus: Get Project Files"
       }
     ],
     "views": {
       "quartus-main": [
         {
-          "id": "quartus-main",
-          "name": "Quartus"
+          "id": "quartus-design-files",
+          "name": "Quartus Design Files"
         }
       ]
     },

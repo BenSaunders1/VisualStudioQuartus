@@ -2,11 +2,16 @@ import * as vscode from 'vscode';
 import * as newProject from './quartus/newProject';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as getProjectFiles from './quartus/getProjectFiles';
 
+import { DesignFilesDataProvider } from './views/DesignFilesDataProvider';
 
 const commands: { alias: string, callback: () => void }[] = [
-	{ alias: 'quartusextension.newProject', callback: newProject.getCommand() }
+	{ alias: 'quartusextension.newProject', callback: newProject.getCommand() },
+	{ alias: 'quartusextension.getProjectFiles', callback: getProjectFiles.getCommand() }   
 ];
+
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -25,6 +30,10 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	vscode.commands.executeCommand('setContext', 'detectQuartusProject', detectQuartusProject());
 
+	// Main-quartus view, adding a design files tree
+	const myTreeDataProvider = new DesignFilesDataProvider();
+	vscode.window.registerTreeDataProvider('quartus-design-files', myTreeDataProvider);
+	vscode.commands.registerCommand('quartus-design-files.refresh', () => myTreeDataProvider.refresh());
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated

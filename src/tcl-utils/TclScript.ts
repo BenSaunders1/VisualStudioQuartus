@@ -22,20 +22,31 @@ export class TclScript {
         this.scriptContents.push(command);
     }
 
-    async execute(): Promise<void> {
+    async execute(): Promise<string> {
         await vscode.workspace.fs.writeFile(vscode.Uri.joinPath(this.directory, 'tcl-scripts', this.fileName), Buffer.from(this.scriptContents.join('\n')));
 
         // Execute the tcl script
         // console.log('cd ' + this.directory.fsPath + '\\..\\ && ' + 'quartus_sh -t .\\.vsquartus\\tcl-scripts\\' + this.fileName);
-        return new Promise((resolve, reject) => {
-            exec('cd ' + this.directory.fsPath + '\\..\\ && ' + 'quartus_sh -t .\\.vsquartus\\tcl-scripts\\' + this.fileName, (error, stdout, stderr) => {
-                if (error) {
-                    reject(error);
-                }
-                console.log(stdout);
-                resolve();
+        const stdout = exec('cd ' + this.directory.fsPath + '\\..\\ && ' + 'quartus_sh -t .\\.vsquartus\\tcl-scripts\\' + this.fileName).stdout;
+        
+        if (!stdout) {
+            console.log('stdout is null');
+            return '';
+        }
+        
+        // Copilot Jargon soz
+        const output = await new Promise<string>((resolve, reject) => {
+            let output = '';
+            stdout.on('data', (data) => {
+                output += data;
+            });
+
+            stdout.on('end', () => {
+                resolve(output);
             });
         });
+
+        return output;
     }
 
     delete() {

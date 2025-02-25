@@ -45,6 +45,7 @@ export function getCommand() {
 
             await newProjectSetup(folderUri[0]);
 
+            
             vscode.commands.executeCommand('vscode.openFolder', folderUri[0]);
             vscode.commands.executeCommand('workbench.action.reloadWindow');
 

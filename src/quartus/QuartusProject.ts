@@ -38,6 +38,7 @@ export class QuartusProject {
         this.projectName = projectName;
 
         console.log("Contructor Complete");
+        QuartusProject.export(this);
     }
 
     async init() {
@@ -46,11 +47,8 @@ export class QuartusProject {
         vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(this.directory, '.vsquartus', 'tcl-scripts'));
 
         // Make the TCL Script
-        console.log("Creating TCL Script");
         const script = new TclScript('create_project.tcl', vscode.Uri.joinPath(this.directory, '.vsquartus'));
 
-        // Add the commands to the script
-        console.log("Adding Commands");
 
         // script.addCommand("set output_dir " + this.directory.fsPath);
 
@@ -60,15 +58,10 @@ export class QuartusProject {
         script.addCommand("project_close");
 
         // Execute the script
-        console.log("Executing");
         await script.execute();
 
         // Delete the script
-        console.log("Deleting");
-        // script.delete();
-
-
-        console.log("CREATED");
+        script.delete();
     }
 
     /**
@@ -80,7 +73,7 @@ export class QuartusProject {
             deviceFamily: this.deviceFamily,
             partNumber: this.partNumber,
             projectName: this.projectName,
-            directory: this.directory
+            directory: this.directory.toString()
         };
     }
 
@@ -90,10 +83,40 @@ export class QuartusProject {
      * @returns QuartusProject object
      */
     static fromJSON(json: any): QuartusProject {
-        const project = new QuartusProject(json.deviceFamily, json.partNumber, json.projectName, json.directory);
+        console.log(json.directory);
+        const pathUri = vscode.Uri.parse(json.directory);
+        console.log(pathUri);
+        const project = new QuartusProject(json.deviceFamily, json.partNumber, json.projectName, pathUri);
         return project;
     }
 
+    /**
+     * Exports the QuartusProject object to the project directory.
+     * @param project QuartusProject object
+     */
+    static async export(project: QuartusProject) {
+        const projectJSON = project.toJSON();   
+        const directory = vscode.Uri.joinPath(project.directory, '.vsquartus', 'config.json');
+        const buffer = Buffer.from(JSON.stringify(projectJSON));
+        vscode.workspace.fs.writeFile(directory, buffer);
+    }
+
+    /**
+     * Imports a QuartusProject object from the project directory.
+     * @param directory vscode.Uri of the project directory
+     * @returns QuartusProject object
+     */
+    static async import(): Promise<QuartusProject | undefined> {
+        const directory = vscode.workspace.workspaceFolders?.[0].uri;
+        if (!directory) {
+            console.error('No workspace folder is open');
+            return;
+        }
+
+        const projectString = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(directory, '.vsquartus', 'config.json'));
+        const projectJSON = JSON.parse(projectString.toString());
+        return QuartusProject.fromJSON(projectJSON);
+    }
 
     /**
      * Generates a list of supported device families.
