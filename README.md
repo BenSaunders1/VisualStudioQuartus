@@ -20,5 +20,5 @@ Currently, you input the following information:
 This will create a basic quartus project, and set the device for you.
 
 ### Open existing project
-Currently, the extension only knows if a quartus project exists if there is a `.quartus` folder. This is a mega WIP, and will be altered very soon.
+Currently, the extension only knows if a quartus project exists if there is a `.vsquartus` folder. This is a mega WIP, and will be altered very soon.
 
