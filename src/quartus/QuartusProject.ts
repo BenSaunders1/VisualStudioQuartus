@@ -91,7 +91,7 @@ export class QuartusProject {
      */
     static fromJSON(json: any): QuartusProject {
         const project = new QuartusProject(json.deviceFamily, json.partNumber, json.projectName, json.directory);
-        return project
+        return project;
     }
 
 
