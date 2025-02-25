@@ -72,6 +72,30 @@ export class QuartusProject {
     }
 
     /**
+     * Converts the QuartusProject object to a JSON object.
+     * @returns JSON object
+     */
+    toJSON() {
+        return {
+            deviceFamily: this.deviceFamily,
+            partNumber: this.partNumber,
+            projectName: this.projectName,
+            directory: this.directory
+        };
+    }
+
+    /**
+     * Converts a JSON object to a QuartusProject object.
+     * @param json JSON object
+     * @returns QuartusProject object
+     */
+    static fromJSON(json: any): QuartusProject {
+        const project = new QuartusProject(json.deviceFamily, json.partNumber, json.projectName, json.directory);
+        return project
+    }
+
+
+    /**
      * Generates a list of supported device families.
      * @returns string[] list of supported device families
      */
