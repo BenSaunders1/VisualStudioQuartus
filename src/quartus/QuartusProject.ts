@@ -5,6 +5,8 @@
 
 import { assert } from 'console';
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import { TclScript } from '../tcl-utils/TclScript';
 
 
 
@@ -12,28 +14,60 @@ export class QuartusProject {
     deviceFamily: string;
     partNumber: string;
     projectName: string;
+    directory: vscode.Uri;
 
-    constructor(deviceFamily: string, partNumber: string, projectName: string) {
+    constructor(deviceFamily: string, partNumber: string, projectName: string, directory: vscode.Uri) {
+        this.directory = directory;
+
+        console.log("Checking Device Family");
         if (QuartusProject.checkDeviceFamily(deviceFamily) !== null) {
-            throw new Error('Device family is not supported');
-        } else {
-            this.deviceFamily = deviceFamily;
+            console.error('Device family is not supported');
         }
+        this.deviceFamily = deviceFamily;
 
+        console.log("Checking Part Number");
         if (QuartusProject.checkPartNumber(partNumber, deviceFamily) !== null) {
-            throw new Error('Part number is not supported');
-        } else {
-            this.partNumber = partNumber;
+            console.error('Part number is not supported');
         }
+        this.partNumber = partNumber;
 
+        console.log("Checking Project Name");
         if (QuartusProject.checkProjectName(projectName) !== null) {
-            throw new Error('Project name is not valid');
-        } else {
-            this.projectName = projectName;
+            console.error('Project name is not valid');
         }
+        this.projectName = projectName;
+
+        console.log("Contructor Complete");
     }
 
     async init() {
+        // Make VSQ Dir
+        vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(this.directory, '.vsquartus'));
+        vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(this.directory, '.vsquartus', 'tcl-scripts'));
+
+        // Make the TCL Script
+        console.log("Creating TCL Script");
+        const script = new TclScript('create_project.tcl', vscode.Uri.joinPath(this.directory, '.vsquartus'));
+
+        // Add the commands to the script
+        console.log("Adding Commands");
+
+        // script.addCommand("set output_dir " + this.directory.fsPath);
+
+        script.addCommand("project_new " + this.projectName + " -overwrite");
+        script.addCommand("set_global_assignment -name FAMILY \"" + this.deviceFamily + "\"");
+        script.addCommand("set_global_assignment -name DEVICE " + this.partNumber);
+        script.addCommand("project_close");
+
+        // Execute the script
+        console.log("Executing");
+        await script.execute();
+
+        // Delete the script
+        console.log("Deleting");
+        // script.delete();
+
+
         console.log("CREATED");
     }
 
@@ -103,7 +137,7 @@ export class QuartusProject {
         const supportedDevices = require('../../supported-devices.json');
 
         if (!QuartusProject.checkDeviceFamily(deviceFamily)) {
-            throw new Error('Device family is not supported');
+            return "Invalid device family";
         }
 
         const partNumbers = supportedDevices.device_family[deviceFamily].part_numbers;

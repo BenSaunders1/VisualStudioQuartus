@@ -17,13 +17,13 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const folderPath = workspaceFolders[0].uri.fsPath;
-		return fs.existsSync(path.join(folderPath, '.quartus'));
+		const vsqPath = path.join(folderPath, '.vsquartus');
+		console.log(vsqPath);
+		return fs.existsSync(vsqPath);
 	};
 
 	
 	vscode.commands.executeCommand('setContext', 'detectQuartusProject', detectQuartusProject());
-
-
 
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
