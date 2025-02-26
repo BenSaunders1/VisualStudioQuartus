@@ -3,12 +3,13 @@ import * as newProject from './quartus/newProject';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as getProjectFiles from './quartus/getProjectFiles';
+import * as addProjectFiles from './quartus/addProjectFiles';
 
 import { DesignFilesDataProvider } from './views/DesignFilesDataProvider';
 
 const commands: { alias: string, callback: () => void }[] = [
-	{ alias: 'quartusextension.newProject', callback: newProject.getCommand() },
-	{ alias: 'quartusextension.getProjectFiles', callback: getProjectFiles.getCommand() }   
+	{ alias: 'quartusextension.newProject', callback: newProject.getCommand() }, 
+	{ alias: 'quartusextension.addProjectFiles', callback: addProjectFiles.getCommand() }
 ];
 
 

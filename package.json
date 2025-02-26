@@ -29,15 +29,28 @@
         "title": "Quartus: Refresh Design Files"
       },
       {
-        "command": "quartusextension.getProjectFiles",
-        "title": "Quartus: Get Project Files"
+        "command": "quartusextension.addProjectFiles",
+        "title": "Quartus: Create Project File",
+        "icon": "$(add)"
       }
     ],
     "views": {
       "quartus-main": [
         {
           "id": "quartus-design-files",
-          "name": "Quartus Design Files"
+          "name": "Design Files"
+        },
+        {
+          "id": "quartus-pin-assignments",
+          "name": "Pin Assignments"
+        },
+        {
+          "id": "quartus-compilation",
+          "name": "Compile & Run"
+        },
+        {
+          "id": "quartus-timing-analysis",
+          "name": "Timing Analysis"
         }
       ]
     },
@@ -47,7 +60,16 @@
         "contents": "In order to use quartus features, you can open a folder containing a quartus project, or create a new project with the button bellow.\n[Open Folder](command:vscode.openFolder)\n[Create New Project](command:quartusextension.newProject)\nTo learn more about how to use quartus projects in VS Code [read our docs](https://www.chat.com).",
         "when": "detectQuartusProject == false"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "quartusextension.addProjectFiles",
+          "group": "navigation",
+          "when": "view == quartus-design-files"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

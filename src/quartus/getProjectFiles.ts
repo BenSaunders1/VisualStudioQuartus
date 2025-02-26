@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 import { TclScript } from '../tcl-utils/TclScript';
 import { QuartusProject } from './QuartusProject';
 
-export function getCommand() {
-    return async () => {
+export async function getProjectFiles() {
         console.log("Getting project files");
         const project = await QuartusProject.import();
 
@@ -12,26 +11,24 @@ export function getCommand() {
             return;
         }
 
-        console.log(project);
-
         const script = new TclScript('get_project_files.tcl', vscode.Uri.joinPath(project.directory, '.vsquartus'));
         
         script.addCommand('project_open ' + project.projectName);
-        script.addCommand('set file_list [get_all_files]');
-        script.addCommand('foreach file $file_list { puts $file }');
+        script.addCommand('set file_list_v [get_all_global_assignments -name VERILOG_FILE]');
+        script.addCommand('foreach_in_collection file $file_list_v { puts [lindex $file 2] }');
+        script.addCommand('set file_list_vhdl [get_all_global_assignments -name VHDL_FILE]');
+        script.addCommand('foreach_in_collection file $file_list_vhdl { puts [lindex $file 2] }');
         script.addCommand('project_close');
-
-        console.log(script.scriptContents);
 
         const outputFiles = await script.execute();
 
-        // script.delete();
+        script.delete();
         
-        console.log(outputFiles);
+        // Strip all lines of their spaces at the beginnig, and that start with "Info" or "Error"
+        const files = outputFiles.split('\n').map((line) => line.trim()).filter((line) => !line.startsWith('Info') && !line.startsWith('Error'));
 
-        // TODO: Handle nofiles
+        // console.log(files);
 
-        // TODO: Handle getting filenames
-
+        // Return all but the last list element (empty)
+        return files.slice(0, -1);
     };
-} 

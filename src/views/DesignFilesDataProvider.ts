@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
+import { getProjectFiles } from "../quartus/getProjectFiles";
+import path from "path";
 
 export class DesignFilesDataProvider implements vscode.TreeDataProvider<DesignFile> {
-    private _onDidChangeTreeData: vscode.EventEmitter<DesignFile | undefined | void> = new vscode.EventEmitter<DesignFile | undefined | void>();
+    private _onDidChangeTreeData: vscode.EventEmitter<DesignFile | undefined | void> = new vscode.EventEmitter<
+        DesignFile | undefined | void
+    >();
     readonly onDidChangeTreeData: vscode.Event<DesignFile | undefined | void> = this._onDidChangeTreeData.event;
 
     getTreeItem(element: DesignFile): vscode.TreeItem {
@@ -9,31 +13,50 @@ export class DesignFilesDataProvider implements vscode.TreeDataProvider<DesignFi
     }
 
     getChildren(element?: DesignFile): Thenable<DesignFile[]> {
-        if (!element){
+        if (!element) {
+            const verilogNode = new DesignFile("Verilog [.v]", vscode.TreeItemCollapsibleState.Collapsed);
+            const vhdlNode = new DesignFile("VHDL [.vhdl]", vscode.TreeItemCollapsibleState.Collapsed);
+
             return Promise.resolve([
-                new DesignFile("Verilog [.v]", vscode.TreeItemCollapsibleState.Collapsed),
-                new DesignFile("VHDL [.vhdl]", vscode.TreeItemCollapsibleState.Collapsed),
+                verilogNode,
+                vhdlNode,
             ]);
         }
 
+        const projectFiles = getProjectFiles();
+
         if (element.label === "Verilog [.v]") {
-            return Promise.resolve([
-                new DesignFile("top.v", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("module.v", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("shit.v", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("fuck.v", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("cum.v", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("doodle.v", vscode.TreeItemCollapsibleState.None),
-            ]);
-        } else {
-            return Promise.resolve([
-                new DesignFile("who.vhdl", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("the.vhdl", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("fuck.vhdl", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("uses.vhdl", vscode.TreeItemCollapsibleState.None),
-                new DesignFile("VHDL.vhdl", vscode.TreeItemCollapsibleState.None),
-            ]);
+            const designFileNodes = projectFiles.then((files) => {
+                if (!files) {
+                    return [];
+                }
+                return files
+                    .filter((file) => file.endsWith(".v"))
+                    .map((file) => {
+                        const designFile = new DesignFile(file, vscode.TreeItemCollapsibleState.None);
+                        designFile.iconPath = path.join(__filename, "..", "..", "resources", "verilog.svg");
+                        return designFile;
+                    });
+            });
+            return designFileNodes;
+        } else if (element.label === "VHDL [.vhdl]") {
+            const designFileNodes = projectFiles.then((files) => {
+                if (!files) {
+                    return [];
+                }
+                return files
+                    .filter((file) => file.endsWith(".vhdl"))
+                    .map((file) => {
+                        const designFile = new DesignFile(file, vscode.TreeItemCollapsibleState.None);
+                        designFile.iconPath = path.join(__filename, "..", "..", "resources", "verilog.svg");
+                        return designFile;
+                    });
+
+            });
+            return designFileNodes;
         }
+
+        return Promise.resolve([]);
     }
 
     refresh(): void {

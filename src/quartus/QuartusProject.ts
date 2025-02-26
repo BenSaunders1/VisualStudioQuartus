@@ -220,4 +220,35 @@ export class QuartusProject {
 
         return null;
     }
+
+    /**
+     * Ensures the inputed file name is valid.
+     * @param fileName string input for the file name
+     * @returns null if good, and error message string if bad (as per "validateInput" in vscode.window.showInputBox)
+     */
+    static checkFileName(fileName: string): string | null {
+        // Check for empty string
+        if (fileName === "") {
+            return "File name must not be empty";
+        }
+
+        // Check for spaces
+        if (fileName.includes(' ')) {
+            return "File name must not contain spaces";
+        }
+        
+        // Check alphanumeric characters
+        if (!fileName.match(/^[0-9a-zA-Z.]+$/)) {
+            return "File name must only contain alphanumeric characters";
+        }
+
+        const supportedFileTypes = ['.v', '.vhdl', '.vhd'];
+
+        // Check for file extension
+        if (!supportedFileTypes.includes(fileName.slice(-2))) {
+            return "File name must have a valid file extension: " + supportedFileTypes.join(', ');
+        }
+
+        return null;
+    }
 }

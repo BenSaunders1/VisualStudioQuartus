@@ -50,7 +50,7 @@ export class TclScript {
     }
 
     delete() {
-        fs.unlinkSync(vscode.Uri.joinPath(this.directory, 'tcl-scripts', this.fileName).fsPath);
+        vscode.workspace.fs.delete(vscode.Uri.joinPath(this.directory, 'tcl-scripts', this.fileName));
     }
 
 
