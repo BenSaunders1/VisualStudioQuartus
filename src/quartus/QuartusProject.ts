@@ -221,7 +221,7 @@ export class QuartusProject {
       (d) => d.name === deviceFamily
     ).map((deviceFamily: { name: string; part_numbers: Array<string> }) => {
       return deviceFamily.part_numbers;
-    })[0]; //! fix later
+    }).flat(); //! fix later
 
     // Check the device name is in the list of supported devices
     if (!partNumbers.includes(partNumber)) {
