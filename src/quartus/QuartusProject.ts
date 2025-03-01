@@ -273,11 +273,15 @@ export class QuartusProject {
 
     // Check alphanumeric characters
     if (!fileName.match(/^[0-9a-zA-Z.]+$/)) {
-        return ERRORS.INVALID_FILE_NAME;
+      return ERRORS.INVALID_FILE_NAME;
     }
 
     // Check for file extension
-    if (!SUPPORTED_FILE_EXTENSIONS.includes(fileName.slice(-2))) {
+    if (
+      !fileName.includes(".") ||
+      (fileName.includes(".") &&
+        !SUPPORTED_FILE_EXTENSIONS.includes("." + fileName.split(".").pop()!))
+    ) {
       return (
         "File name must have a valid file extension: " +
         SUPPORTED_FILE_EXTENSIONS.join(", ")
