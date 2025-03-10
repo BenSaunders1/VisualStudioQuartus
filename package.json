@@ -13,11 +13,13 @@
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [{
-        "id": "quartus-main",
-        "title": "Quartus",
-        "icon": "./resources/main-logo.png"
-      }]
+      "activitybar": [
+        {
+          "id": "quartus-main",
+          "title": "Quartus",
+          "icon": "./resources/main-logo.png"
+        }
+      ]
     },
     "commands": [
       {
@@ -32,6 +34,16 @@
         "command": "quartusextension.addProjectFiles",
         "title": "Quartus: Create Project File",
         "icon": "$(add)"
+      },
+      {
+        "command": "quartusextension.setTopLevel",
+        "title": "Quartus: Set as top level entity",
+        "shortTitle": "Set as top level entity",
+        "icon": "$(star)"
+      },
+      {
+        "command": "quartusextension.setPinAssignments",
+        "title": "Quartus: Set Pin Assignments"
       }
     ],
     "views": {
@@ -56,7 +68,7 @@
     },
     "viewsWelcome": [
       {
-        "view":"quartus-main",
+        "view": "quartus-main",
         "contents": "In order to use quartus features, you can open a folder containing a quartus project, or create a new project with the button bellow.\n[Open Folder](command:vscode.openFolder)\n[Create New Project](command:quartusextension.newProject)\nTo learn more about how to use quartus projects in VS Code [read our docs](https://www.chat.com).",
         "when": "detectQuartusProject == false"
       }
@@ -67,6 +79,13 @@
           "command": "quartusextension.addProjectFiles",
           "group": "navigation",
           "when": "view == quartus-design-files"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "quartusextension.setTopLevel",
+          "group": "navigation",
+          "when": "view == quartus-design-files && treeElementCanExpand == false && treeElementCanCollapse == false"
         }
       ]
     }
@@ -86,16 +105,19 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.97.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.97.0",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
-    "eslint": "^9.19.0",
-    "esbuild": "^0.24.2",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.19.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "csv-parser": "^3.2.0"
   }
 }

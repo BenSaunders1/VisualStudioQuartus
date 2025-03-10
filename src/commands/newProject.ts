@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { QuartusProject } from "./QuartusProject";
+import { QuartusProject } from "../quartus/QuartusProject";
 import { INFO_MESSAGES } from "../constants";
 
 export const newProjectSetup = async (newDir: vscode.Uri) => {

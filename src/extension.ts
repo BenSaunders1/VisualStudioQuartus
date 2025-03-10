@@ -1,15 +1,19 @@
 import * as vscode from 'vscode';
-import * as newProject from './quartus/newProject';
+import * as newProject from './commands/newProject';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as getProjectFiles from './quartus/getProjectFiles';
-import * as addProjectFiles from './quartus/addProjectFiles';
+import * as getProjectFiles from './commands/getProjectFiles';
+import * as addProjectFiles from './commands/addProjectFiles';
+import * as setPinAssignments from './commands/setPinAssignments';
+import * as setTopLevel from './commands/setTopLevel';
 
 import { DesignFilesDataProvider } from './views/DesignFilesDataProvider';
 
-const commands: { alias: string, callback: () => void }[] = [
+const commands: { alias: string, callback: (item: any) => void }[] = [
 	{ alias: 'quartusextension.newProject', callback: newProject.getCommand() }, 
-	{ alias: 'quartusextension.addProjectFiles', callback: addProjectFiles.getCommand() }
+	{ alias: 'quartusextension.addProjectFiles', callback: addProjectFiles.getCommand() },
+	{ alias: 'quartusextension.setTopLevel', callback: setTopLevel.getCommand() },
+	{ alias: 'quartusextension.setPinAssignments', callback: setPinAssignments.getCommand() }
 ];
 
 

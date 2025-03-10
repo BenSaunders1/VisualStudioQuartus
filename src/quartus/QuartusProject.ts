@@ -18,6 +18,7 @@ export class QuartusProject {
   partNumber: string;
   projectName: string;
   directory: vscode.Uri;
+  topLevelModule: string = "";
 
   constructor(
     deviceFamily: string,
@@ -268,11 +269,11 @@ export class QuartusProject {
 
     // Check for spaces
     if (fileName.includes(" ")) {
-      return ERRORS.EMPTY_FILE_NAME;
+      return ERRORS.SPACES_FILE_NAME;
     }
 
     // Check alphanumeric characters
-    if (!fileName.match(/^[0-9a-zA-Z.]+$/)) {
+    if (!fileName.match(/^[0-9a-zA-Z._-]+$/)) {
       return ERRORS.INVALID_FILE_NAME;
     }
 

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getProjectFiles } from "../quartus/getProjectFiles";
+import { getProjectFiles } from "../commands/getProjectFiles";
 import path from "path";
 
 export class DesignFilesDataProvider implements vscode.TreeDataProvider<DesignFile> {
@@ -64,7 +64,7 @@ export class DesignFilesDataProvider implements vscode.TreeDataProvider<DesignFi
     }
 }
 
-class DesignFile extends vscode.TreeItem {
+export class DesignFile extends vscode.TreeItem {
     constructor(label: string, collapsibleState: vscode.TreeItemCollapsibleState) {
         super(label, collapsibleState);
     }

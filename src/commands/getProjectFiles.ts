@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TclScript } from "../tcl-utils/TclScript";
-import { QuartusProject } from "./QuartusProject";
+import { QuartusProject } from "../quartus/QuartusProject";
 import { PATHS } from "../constants";
 
 export async function getProjectFiles() {
