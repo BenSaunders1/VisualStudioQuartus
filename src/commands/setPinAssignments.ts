@@ -43,8 +43,8 @@ export function getCommand() {
     pinAssignment.pins.forEach((pin: Pin) => {
         script.addCommand(`set_location_assignment ${pin.location} -to ${pin.name}`);
         script.addCommand(`set_instance_assignment -name IO_STANDARD "${pin.IOStandard}" -to ${pin.name}`);
-        script.addCommand(`set_instance_assignment -name IO_BANK "${pin.IOBank}" -to ${pin.name}`);
-        script.addCommand(`set_instance_assignment -name VREF_GROUP "${pin.VrefGroup}" -to ${pin.name}`);
+        // script.addCommand(`set_instance_assignment -name IO_BANK ${pin.IOBank} -to ${pin.name}`);
+        // script.addCommand(`set_instance_assignment -name VREF_GROUP "${pin.VrefGroup}" -to ${pin.name}`);
     });
 
 
@@ -54,7 +54,7 @@ export function getCommand() {
 
     await script.execute();
 
-    script.delete();
+    // script.delete();
 
     vscode.commands.executeCommand("quartus-design-files.refresh");
   };
